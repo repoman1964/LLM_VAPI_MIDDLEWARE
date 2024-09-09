@@ -1,0 +1,6 @@
+flask
+openai
+flask-cors
+python-dotenv
+requests
+llama-index

@@ -25,7 +25,6 @@ def index():
     return {"hi": "Hello, World!"}
 
 
-
 # List all registered endpoints
 def list_endpoints():
     output = []
@@ -37,9 +36,9 @@ def list_endpoints():
 
 
 # Print the list of registered endpoints to the terminal
-endpoints = list_endpoints()
-for endpoint in endpoints:
-    print(f"Endpoint: {endpoint[0]}, Methods: {endpoint[1]}")
+# endpoints = list_endpoints()
+# for endpoint in endpoints:
+#     print(f"Endpoint: {endpoint[0]}, Methods: {endpoint[1]}")
 
 
 def main():

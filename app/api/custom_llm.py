@@ -12,6 +12,16 @@ client = OpenAI(
 )
 
 
+# @custom_llm.route('/assmunch')
+# def index():
+#     return {"hi": "Hello, World!"}
+
+@custom_llm.get('/assmunch')
+def assmunch():
+    return {"ass": "munch"}
+
+
+
 
 def generate_streaming_response(data):
   """
