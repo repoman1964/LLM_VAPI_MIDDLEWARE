@@ -75,8 +75,6 @@ async def status_update_handler(payload):
     """
     return {}
 
-
-
 async def end_of_call_report_handler(payload):
     """
     Handle Business logic here.
@@ -91,7 +89,6 @@ async def speech_update_handler(payload):
     You can enable this by passing "speech-update" in the serverMessages array while creating the assistant.
     """
     return {}
-
 
 async def transcript_handler(payload):
     """
@@ -108,7 +105,6 @@ async def hang_event_handler(payload):
     You can update the database or have some followup actions or workflow triggered.
     """
     return 
-
 
 async def assistant_request_handler(payload):
     """

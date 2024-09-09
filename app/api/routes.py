@@ -1,4 +1,5 @@
 from .inbound import inbound_bp
+from .middleware import middleware_bp
 from .outbound import outbound_bp
 from .custom_llm import custom_llm
 from .webhook import webhook
@@ -8,6 +9,7 @@ from . import api
 
 # Register blueprints
 api.register_blueprint(inbound_bp)
+api.register_blueprint(middleware_bp)
 api.register_blueprint(outbound_bp)
 api.register_blueprint(custom_llm, url_prefix='/custom-llm')
 api.register_blueprint(webhook, url_prefix='/webhook')
