@@ -3,11 +3,10 @@ from vapi import VapiPayload, VapiWebhookEnum
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 from langchain.schema import AIMessage, HumanMessage, SystemMessage
-from langchain.memory import ChatMessageHistory
+from langchain_community.chat_message_histories import ChatMessageHistory
 from langchain_core.runnables import RunnableWithMessageHistory
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
-import json, requests
-import json, requests
+import json
 
 app = Flask(__name__)
 
@@ -89,11 +88,8 @@ async def chat_completions():
     # Get the 'messages' array from the JSON object
     messages = request.json.get("messages", [])
 
-    # Convert messages to Langchain message types
-    # VAPI uses different phraseology than LANGCHAIN
-    langchain_messages = []
-
-   # Convert messages to Langchain message types and add to history
+    # VAPI uses different phraseology than LANGCHAIN  
+    # Convert messages to Langchain message types and add to history
     for msg in messages:
         if msg['role'] == 'system':
             message_history.add_message(SystemMessage(content=msg['content']))
