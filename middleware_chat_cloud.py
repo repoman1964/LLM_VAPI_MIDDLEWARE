@@ -1,4 +1,6 @@
 from flask import Flask, Blueprint, request, Response, json, jsonify
+from google.cloud import firestore
+from langchain_google_firestore import FirestoreChatMessageHistory
 from vapi import VapiPayload, VapiWebhookEnum
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
@@ -15,15 +17,31 @@ middleware_bp = Blueprint('middleware_api', __name__)
 # Load environment variables from .env
 load_dotenv()
 
+PROJECT_ID = "middleware-85dd0"
+COLLECTION_NAME = "chat_history"
+SESSION_ID = "user_session_new"
+
+# Initialize Firestore Client
+print("Initializing Firestore Client...")
+client = firestore.Client(project=PROJECT_ID)
+print(client)
+
+# Initialize Firestore Chat Message History
+print("Initializing Firestore Chat Message History...")
+chat_history = FirestoreChatMessageHistory(
+    session_id=SESSION_ID,
+    collection=COLLECTION_NAME,
+    client=client)
+
+print("Chat History Initialized.")
+print("Current Chat History:", chat_history.messages)
+
 # Create a ChatOpenAI model with streaming enabled
 chat_model = ChatOpenAI(
     model="gpt-4",
     streaming=True,
     temperature=0.7
 )
-
-# Initialize ChatMessageHistory
-message_history = ChatMessageHistory()
 
 # Create a prompt template
 prompt = ChatPromptTemplate.from_messages([
@@ -37,7 +55,11 @@ prompt = ChatPromptTemplate.from_messages([
 runnable = prompt | chat_model
 runnable_with_message_history = RunnableWithMessageHistory(
     runnable,
-    lambda session_id: message_history,
+    lambda session_id: FirestoreChatMessageHistory(
+        session_id=session_id,
+        collection=COLLECTION_NAME,
+        client=client
+    ),
     input_messages_key="input",
     history_messages_key="history"
 )
@@ -92,11 +114,11 @@ async def chat_completions():
     # Convert messages to Langchain message types and add to history
     for msg in messages:
         if msg['role'] == 'system':
-            message_history.add_message(SystemMessage(content=msg['content']))
+            chat_history.add_message(SystemMessage(content=msg['content']))
         elif msg['role'] == 'user':
-            message_history.add_message(HumanMessage(content=msg['content']))
+            chat_history.add_message(HumanMessage(content=msg['content']))
         elif msg['role'] == 'assistant':
-            message_history.add_message(AIMessage(content=msg['content']))
+            chat_history.add_message(AIMessage(content=msg['content']))
 
 
     # Get the last user message
