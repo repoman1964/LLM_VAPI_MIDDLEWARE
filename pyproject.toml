@@ -13,6 +13,8 @@ flask-cors = "^4.0.0"
 python-dotenv = "^1.0.1"
 requests = "^2.31.0"
 llama-index = "^0.9.19"
+langchain = "^0.2.16"
+langchain-openai = "^0.1.23"
 
 
 [build-system]

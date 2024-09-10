@@ -100,6 +100,8 @@ class VapiWebhookEnum(Enum):
     HANG = "hang"
     SPEECH_UPDATE = "speech-update"
     TRANSCRIPT = "transcript"
+    # added by assmunch
+    CONVERSATION_UPDATE = "conversation-update"
 
 class ConversationMessage(TypedDict):
     role: Literal["user", "system", "bot", "function_call", "function_result"]
