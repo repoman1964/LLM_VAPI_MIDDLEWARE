@@ -1,6 +1,89 @@
-flask
-openai
-flask-cors
-python-dotenv
-requests
-llama-index
+aiohappyeyeballs==2.4.0
+aiohttp==3.10.5
+aiosignal==1.3.1
+annotated-types==0.7.0
+anyio==4.4.0
+app==0.1.0
+asgiref @ file:///home/jose/.cache/pypoetry/artifacts/31/41/03/ed18ba0ef1acb2a5c8896c53d444d768297d6839a5cc492d8901c3e78e/asgiref-3.8.1-py3-none-any.whl#sha256=3e1e3ecc849832fe52ccf2cb6686b7a55f82bb1d6aee72a58826471390335e47
+attrs==24.2.0
+beautifulsoup4==4.12.3
+blinker==1.8.2
+certifi==2024.8.30
+charset-normalizer==3.3.2
+click==8.1.7
+dataclasses-json==0.6.7
+Deprecated==1.2.14
+dirtyjson==1.0.8
+distro==1.9.0
+Flask==3.0.3
+Flask-Cors @ file:///home/jose/.cache/pypoetry/artifacts/6e/a5/12/e3c2275ab96af6fd94dc68af8140249d5f8a963b5e663541c8adbbda26/Flask_Cors-4.0.2-py2.py3-none-any.whl#sha256=38364faf1a7a5d0a55bd1d2e2f83ee9e359039182f5e6a029557e1f56d92c09a
+frozenlist==1.4.1
+fsspec==2024.9.0
+greenlet==3.0.3
+h11==0.14.0
+httpcore==1.0.5
+httpx==0.27.2
+idna==3.8
+itsdangerous==2.2.0
+Jinja2==3.1.4
+jiter==0.5.0
+joblib==1.4.2
+jsonpatch @ file:///home/jose/.cache/pypoetry/artifacts/7f/a7/39/ebb10b356adbf51f644867276c4b3957deb3dfa35e24a872a8b4f64c32/jsonpatch-1.33-py2.py3-none-any.whl#sha256=0ae28c0cd062bbd8b8ecc26d7d164fbbea9652a1a3693f3b956c1eae5145dade
+jsonpointer @ file:///home/jose/.cache/pypoetry/artifacts/78/61/10/9f53bfd187afb4a0c998016ffb7d065fedcbe7ac5650eb22894e7b67e4/jsonpointer-3.0.0-py2.py3-none-any.whl#sha256=13e088adc14fca8b6aa8177c044e12701e6ad4b28ff10e65f2267a90109c9942
+langchain @ file:///home/jose/.cache/pypoetry/artifacts/dc/f0/3e/de058a382fc673b2e3d1911e4aa5847c972dd58d0165ec9f9299f543c8/langchain-0.2.16-py3-none-any.whl#sha256=8f59ee8b45f268df4b924ea3b9c63e49286efa756d16b3f6a9de5c6e502c36e1
+langchain-core @ file:///home/jose/.cache/pypoetry/artifacts/2e/62/ab/3772cb850c09e772b9c56742fefb7cea60006d553bc07b06d016f23c05/langchain_core-0.2.38-py3-none-any.whl#sha256=8a5729bc7e68b4af089af20eff44fe4e7ca21d0e0c87ec21cef7621981fd1a4a
+langchain-openai @ file:///home/jose/.cache/pypoetry/artifacts/17/7b/5e/31d9d5d228f0f6525a1eb5d17db1bb5c8eeea2d8a7782ee93d44dd1ac3/langchain_openai-0.1.23-py3-none-any.whl#sha256=8e3d215803e157f26480c6108eb4333629832b1a0e746723060c24f93b8b78f4
+langchain-text-splitters @ file:///home/jose/.cache/pypoetry/artifacts/32/d5/17/c981e77763155dd999a7646099419773f3e330d10a71818342a05827a1/langchain_text_splitters-0.2.4-py3-none-any.whl#sha256=2702dee5b7cbdd595ccbe43b8d38d01a34aa8583f4d6a5a68ad2305ae3e7b645
+langsmith @ file:///home/jose/.cache/pypoetry/artifacts/2e/9b/e2/d7e59c3bcf912f0bb9844ea75496b7908c0f3562daac032ca37c977416/langsmith-0.1.117-py3-none-any.whl#sha256=e936ee9bcf8293b0496df7ba462a3702179fbe51f9dc28744b0fbec0dbf206ae
+llama-cloud==0.0.17
+llama-index @ file:///home/jose/.cache/pypoetry/artifacts/9f/14/07/ea9ac46f2ac7e94a3e451545cda27f8e4926755e25664afa15ef5c500b/llama_index-0.9.48-py3-none-any.whl#sha256=56aa406d39e7ca53a5d990b55d69901fbb9eddc9af6a40950367dc5d734f6283
+llama-index-agent-openai==0.3.1
+llama-index-cli==0.3.0
+llama-index-core==0.11.7
+llama-index-embeddings-openai==0.2.4
+llama-index-indices-managed-llama-cloud==0.3.0
+llama-index-legacy==0.9.48.post3
+llama-index-llms-openai==0.2.3
+llama-index-multi-modal-llms-openai==0.2.0
+llama-index-program-openai==0.2.0
+llama-index-question-gen-openai==0.2.0
+llama-index-readers-file==0.2.1
+llama-index-readers-llama-parse==0.3.0
+llama-parse==0.5.3
+MarkupSafe==2.1.5
+marshmallow==3.22.0
+multidict==6.0.5
+mypy-extensions==1.0.0
+nest-asyncio==1.6.0
+networkx==3.3
+nltk==3.9.1
+numpy @ file:///home/jose/.cache/pypoetry/artifacts/db/19/2b/981de36004972c1fdab9620debcd2ecea079e3e6d6ace5ede04c4e72a6/numpy-1.26.4-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl#sha256=666dbfb6ec68962c033a450943ded891bed2d54e6755e35e5835d63f4f6931d5
+openai==1.44.1
+orjson @ file:///home/jose/.cache/pypoetry/artifacts/f5/77/50/eb760524850dc2e7a2dcfc56151cba8b02d092e3d4bb4ce66fec3fb860/orjson-3.10.7-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl#sha256=b58d3795dafa334fc8fd46f7c5dc013e6ad06fd5b9a4cc98cb1456e7d3558bd6
+packaging==24.1
+pandas==2.2.2
+pillow==10.4.0
+pydantic==2.9.1
+pydantic_core==2.23.3
+pypdf==4.3.1
+python-dateutil==2.9.0.post0
+python-dotenv==1.0.1
+pytz==2024.1
+PyYAML==6.0.2
+regex==2024.7.24
+requests==2.32.3
+six==1.16.0
+sniffio==1.3.1
+soupsieve==2.6
+SQLAlchemy==2.0.34
+striprtf==0.0.26
+tenacity==8.5.0
+tiktoken==0.7.0
+tqdm==4.66.5
+typing-inspect==0.9.0
+typing_extensions==4.12.2
+tzdata==2024.1
+urllib3==2.2.2
+Werkzeug==3.0.4
+wrapt==1.16.0
+yarl==1.11.0

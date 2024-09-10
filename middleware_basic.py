@@ -1,16 +1,9 @@
-import os
 from flask import Flask, Blueprint, request, Response, json, jsonify
-import requests
-import time
-import sqlite3
-
-from flask import Blueprint,request, jsonify, Response
-from app.types.vapi import VapiPayload, VapiWebhookEnum
-
+from vapi import VapiPayload, VapiWebhookEnum
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 from langchain.schema import HumanMessage
-import json, time
+import json, requests
 
 app = Flask(__name__)
 
@@ -60,28 +53,22 @@ async def middleware():
     
 # this is the server url set in the assistant_config. vapi sends to that endpoint + "/chat/completions"    
 @middleware_bp.route('/chat/completions', methods=['POST'])
-async def chat_completions():
-    user_message_content = request.json.get('query', "Tell me about AI in 25 words.")
+async def chat_completions():    
 
     # Get the 'messages' array from the JSON object
     messages = request.json.get("messages", [])
 
     # Find the most recent message where role is 'user'
-    user_message_content = None
+    human_message_content = None
     for message in messages:
         if message.get("role") == "user":
-            user_message_content = message.get("content")
+            human_message_content = message.get("content")
 
-    # testing
-    # user_message_content = "Tell me about AI in 25 words."
-    
-    print(user_message_content)
-
-    return Response(generate_response(user_message_content), content_type='text/event-stream')
+    return Response(generate_response(human_message_content), content_type='text/event-stream')
 
 # HANDLERS
 
-def generate_response(query):
+def generate_response(human_message_content):
     # Create a ChatOpenAI model with streaming enabled
     model = ChatOpenAI(
         model="gpt-4o",
@@ -90,7 +77,7 @@ def generate_response(query):
     )
 
     # Create a human message
-    human_message = HumanMessage(content=query)
+    human_message = HumanMessage(content=human_message_content)
 
     # Stream the response
     for chunk in model.stream([human_message]):
@@ -192,17 +179,17 @@ async def assistant_request_handler(payload):
             "name": "Andrew",
             "model": {
                 "provider": "custom-llm",
-                "model": "ohwaa tagoo siam",
-                "url": "https://760b-24-96-15-35.ngrok-free.app/api/",
+                "model": "not specified",
+                "url": "https://760b-24-96-15-35.ngrok-free.app/",
                 "temperature": 0.7,
-                "systemPrompt": "You're Andrew, an AI assistant who can help user draft beautiful emails to their clients based on the user requirements."
+                "systemPrompt": "You're Andrew, an AI assistant who can help user with any questions they have."
             },
             "voice": {
                 "provider": "azure",
                 "voiceId": "andrew",
                 "speed": 1
             },
-            "firstMessage": "Hi, I'm Paula, your personal email assistant.",
+            "firstMessage": "Hi, I'm Andrew, your personal AI assistant.",
             "recordingEnabled": True
         }
         return {'assistant': assistant_config}
@@ -211,4 +198,7 @@ async def assistant_request_handler(payload):
 
 
 
-        
+app.register_blueprint(middleware_bp)
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000) 
