@@ -7,14 +7,12 @@ import json, requests
 
 app = Quart(__name__)
 
-middleware_bp = Blueprint('middleware_api', __name__)
-
 # Load environment variables from .env
 load_dotenv()
 
 # ENDPOINTS
 
-@middleware_bp.route('/middleware', methods=['POST'])
+@app.route('/middleware', methods=['POST'])
 async def middleware():
     try:
         req_body = await request.get_json()
@@ -52,7 +50,7 @@ async def middleware():
         return jsonify({'error': str(e)}), 500
     
 # this is the server url set in the assistant_config. vapi sends to that endpoint + "/chat/completions"    
-@middleware_bp.route('/chat/completions', methods=['POST'])
+@app.route('/chat/completions', methods=['POST'])
 async def chat_completions():    
 
     # Get the 'messages' array from the JSON object
@@ -174,8 +172,6 @@ async def assistant_request_handler(payload):
 
     raise ValueError('Invalid call details provided.')
 
-
-app.register_blueprint(middleware_bp)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
