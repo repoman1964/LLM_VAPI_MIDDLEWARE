@@ -8,7 +8,7 @@ from langchain.schema import AIMessage, HumanMessage, SystemMessage
 from langchain_community.chat_message_histories import ChatMessageHistory
 from langchain_core.runnables import RunnableWithMessageHistory
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
-import json
+import json, uuid
 
 app = Flask(__name__)
 
@@ -26,15 +26,28 @@ print("Initializing Firestore Client...")
 client = firestore.Client(project=PROJECT_ID)
 print(client)
 
-# Initialize Firestore Chat Message History
-print("Initializing Firestore Chat Message History...")
-chat_history = FirestoreChatMessageHistory(
-    session_id=SESSION_ID,
-    collection=COLLECTION_NAME,
-    client=client)
+def generate_session_id():
+    return str(uuid.uuid4())
 
-print("Chat History Initialized.")
-print("Current Chat History:", chat_history.messages)
+# Add this function to retrieve chat history
+def get_chat_history(session_id):
+    chat_history = FirestoreChatMessageHistory(
+        session_id=SESSION_ID,
+        collection=COLLECTION_NAME,
+        client=client
+    )
+    print("Current Chat History:", chat_history.messages)
+    return chat_history.messages
+
+# # Initialize Firestore Chat Message History
+# print("Initializing Firestore Chat Message History...")
+# chat_history = FirestoreChatMessageHistory(
+#     session_id=SESSION_ID,
+#     collection=COLLECTION_NAME,
+#     client=client)
+
+# print("Chat History Initialized.")
+# print("Current Chat History:", chat_history.messages)
 
 # Create a ChatOpenAI model with streaming enabled
 chat_model = ChatOpenAI(
@@ -107,12 +120,47 @@ async def middleware():
 @middleware_bp.route('/chat/completions', methods=['POST'])
 async def chat_completions():
 
-    # Get the 'messages' array from the JSON object
-    messages = request.json.get("messages", [])
+    # Get the session ID from the request or generate a new one
+    session_id = request.json.get("session_id", generate_session_id())
+
+    # Retrieve existing chat history
+    chat_history = FirestoreChatMessageHistory(
+        session_id=session_id,
+        collection=COLLECTION_NAME,
+        client=client
+    )
+
+
+    # Retrieve existing chat history
+    existing_messages = chat_history.messages
+
+    # Get the new messages from the request
+    new_messages = request.json.get("messages", [])
+
+    # Combine existing and new messages
+    all_messages = existing_messages + [
+        SystemMessage(content=msg['content']) if msg['role'] == 'system' else
+        HumanMessage(content=msg['content']) if msg['role'] == 'user' else
+        AIMessage(content=msg['content']) for msg in new_messages
+    ]
+
+
+    # # Initialize FirestoreChatMessageHistory for this session
+    # chat_history = FirestoreChatMessageHistory(
+    #     session_id=SESSION_ID,
+    #     collection=COLLECTION_NAME,
+    #     client=client
+    # )
+
+
+    
+
+    # # Get the 'messages' array from the JSON object
+    # messages = request.json.get("messages", [])
 
     # VAPI uses different phraseology than LANGCHAIN  
     # Convert messages to Langchain message types and add to history
-    for msg in messages:
+    for msg in new_messages:
         if msg['role'] == 'system':
             chat_history.add_message(SystemMessage(content=msg['content']))
         elif msg['role'] == 'user':
@@ -122,18 +170,18 @@ async def chat_completions():
 
 
     # Get the last user message
-    last_user_message = messages[-1]['content'] if messages[-1]['role'] == 'user' else None
+    last_user_message = new_messages[-1]['content'] if new_messages[-1]['role'] == 'user' else None
 
-    return Response(generate_response(last_user_message), content_type='text/event-stream')   
+    return Response(generate_response(last_user_message, session_id, all_messages), content_type='text/event-stream')
 
    
 # HANDLERS
 
-def generate_response(human_message_content):
+def generate_response(human_message_content, session_id, all_messages):
     # Stream the response using RunnableWithMessageHistory
     for chunk in runnable_with_message_history.stream(
-        {"input": human_message_content},
-        config={"configurable": {"session_id": "default"}},
+        {"input": human_message_content, "history": all_messages},
+        config={"configurable": {"session_id": session_id}},
     ):
         if chunk.content is not None:
             json_data = json.dumps({

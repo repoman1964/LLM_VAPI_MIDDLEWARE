@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: #00003f;
+            height: 98dvh;
+        }
+
+        .container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            display: grid;
+            place-items: center;
+            isolation: isolate;
+            overflow: hidden;
+        }
+
+        .content {
+            --_gap: 1.5rem;
+            --_color: hsl(60 92% 71% / 1);
+            width: 58%;
+            max-width: 500px;
+            padding: 2.75rem;
+            border: 2px solid hsl(60deg 67% 44% / 64%);
+            border-radius: 20px;
+            color: var(--_color);
+        }
+
+        .content p {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: var(--_gap);
+        }
+
+        .content span {
+            font-size: 1.3em;
+            letter-spacing: 1.3px;
+            line-height: 1.2;
+        }
+
+        .content button {
+            display: block;
+            margin-top: var(--_gap);
+            padding: 0.6em 0.9em;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2em;
+            background: #020043;
+            margin-left: auto;
+            color: var(--_color);
+        }
+
+        .blob {
+            position: absolute;
+            opacity: 0.6;
+            width: 400px;
+            aspect-ratio: 1/1;
+            animation: animate 10s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite alternate forwards;
+            filter: blur(40px);
+            z-index: -1;
+            background: linear-gradient(135deg,
+                    rgba(255, 123, 0, 1) 20%,
+                    /* Vibrant Orange */
+                    rgba(255, 0, 150, 1) 40%,
+                    /* Hot Pink */
+                    rgba(75, 0, 255, 1) 60%,
+                    /* Electric Blue */
+                    rgba(255, 237, 0, 1) 80%,
+                    /* Bright Yellow */
+                    rgba(138, 43, 226, 1) 100%
+                    /* Vivid Purple */
+                );
+
+        }
+
+
+        @keyframes animate {
+            0% {
+                translate: 5% -3%;
+                border-radius: 60% 40% 30% 70% / 100% 85% 92% 74%;
+                rotate: 0deg;
+                scale: 1;
+            }
+
+            25% {
+                translate: 2% 1%;
+                border-radius: 55% 45% 50% 50% / 50% 60% 60% 50%;
+                rotate: 5deg;
+                scale: 1.05;
+            }
+
+            50% {
+                translate: -3% 0%;
+                border-radius: 58% 42% 45% 55% / 85% 70% 75% 65%;
+                rotate: -3deg;
+                scale: 1.02;
+            }
+
+            75% {
+                translate: 4% -2%;
+                border-radius: 53% 47% 60% 40% / 75% 50% 60% 65%;
+                rotate: 2deg;
+                scale: 1.03;
+            }
+
+            100% {
+                translate: 1% 3%;
+                border-radius: 60% 40% 30% 70% / 100% 85% 92% 74%;
+                rotate: 0deg;
+                scale: 1;
+            }
+        }
+    </style>
+
+
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="blob">
+        </div>
+    </div>
+
+
+    <!-- Code injected by live-server -->
+    <script>
+        // <![CDATA[  <-- For SVG support
+        if ('WebSocket' in window) {
+            (function () {
+                function refreshCSS() {
+                    var sheets = [].slice.call(document.getElementsByTagName("link"));
+                    var head = document.getElementsByTagName("head")[0];
+                    for (var i = 0; i < sheets.length; ++i) {
+                        var elem = sheets[i];
+                        var parent = elem.parentElement || head;
+                        parent.removeChild(elem);
+                        var rel = elem.rel;
+                        if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+                            var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+                            elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+                        }
+                        parent.appendChild(elem);
+                    }
+                }
+                var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+                var address = protocol + window.location.host + window.location.pathname + '/ws';
+                var socket = new WebSocket(address);
+                socket.onmessage = function (msg) {
+                    if (msg.data == 'reload') window.location.reload();
+                    else if (msg.data == 'refreshcss') refreshCSS();
+                };
+                if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+                    console.log('Live reload enabled.');
+                    sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+                }
+            })();
+        }
+        else {
+            console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+        }
+        // ]]>
+    </script>
+</body>
+
+</html>

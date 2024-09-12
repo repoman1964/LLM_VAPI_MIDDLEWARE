@@ -180,7 +180,7 @@ async def assistant_request_handler(payload):
             "model": {
                 "provider": "custom-llm",
                 "model": "not specified",
-                "url": "https://760b-24-96-15-35.ngrok-free.app/",
+                "url": "https://4072-24-96-15-35.ngrok-free.app/",
                 "temperature": 0.7,
                 "systemPrompt": "You're Andrew, an AI assistant who can help user with any questions they have."
             },

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Assistant Blob</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: white;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .blob {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            opacity: 0.9;
+            /* Increased opacity for more visibility */
+            background: radial-gradient(circle at 50% 50%, #70db70, #3fa34d, #5b00b7, #301934);
+            /* Soft vibrant green transitioning to deep purples and blues */
+            filter: blur(40px);
+            /* Reduced blur for clarity */
+            border-radius: 50%;
+            animation: subtle-move 10s ease-in-out infinite alternate;
+        }
+
+        @keyframes subtle-move {
+            0% {
+                transform: translate(0, 0) scale(1);
+                border-radius: 45% 55% 60% 40% / 50% 40% 60% 50%;
+            }
+
+            25% {
+                transform: translate(-5%, 3%) scale(1.05);
+                border-radius: 50% 50% 60% 40% / 60% 40% 55% 45%;
+            }
+
+            50% {
+                transform: translate(3%, -2%) scale(1.03);
+                border-radius: 60% 40% 55% 45% / 55% 45% 60% 50%;
+            }
+
+            75% {
+                transform: translate(-2%, 4%) scale(1.02);
+                border-radius: 50% 45% 55% 50% / 60% 55% 45% 50%;
+            }
+
+            100% {
+                transform: translate(2%, -1%) scale(1);
+                border-radius: 45% 55% 60% 40% / 50% 45% 55% 50%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="blob"></div>
+</body>
+
+</html>
