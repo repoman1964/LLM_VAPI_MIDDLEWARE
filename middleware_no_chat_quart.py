@@ -1,11 +1,11 @@
-from flask import Flask, request, Response, jsonify
+from quart import Quart, request, Response, jsonify
 from vapi import VapiPayload, VapiWebhookEnum
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 from langchain.schema import HumanMessage
 import json, requests
 
-app = Flask(__name__)
+app = Quart(__name__)
 
 # Load environment variables from .env
 load_dotenv()
@@ -13,47 +13,49 @@ load_dotenv()
 # ENDPOINTS
 
 @app.route('/middleware', methods=['POST'])
-def middleware():
+async def middleware():
     try:
-        req_body = request.get_json()
+        req_body = await request.get_json()
         payload: VapiPayload = req_body['message']
         print(payload['type'])
         print(VapiWebhookEnum.ASSISTANT_REQUEST.value)
         
         if payload['type'] == VapiWebhookEnum.FUNCTION_CALL.value:
-            response = function_call_handler(payload)
+            response = await function_call_handler(payload)
             return jsonify(response), 200
         elif payload['type'] == VapiWebhookEnum.STATUS_UPDATE.value:
-            response = status_update_handler(payload)
+            response = await status_update_handler(payload)
             return jsonify(response), 200
         elif payload['type'] == VapiWebhookEnum.ASSISTANT_REQUEST.value:
-            response = assistant_request_handler(payload)
+            response = await assistant_request_handler(payload)
             return jsonify(response), 201
         elif payload['type'] == VapiWebhookEnum.END_OF_CALL_REPORT.value:
-            end_of_call_report_handler(payload)
+            await end_of_call_report_handler(payload)
             return jsonify({}), 200
         elif payload['type'] == VapiWebhookEnum.SPEECH_UPDATE.value:
-            response = speech_update_handler(payload)
+            response = await speech_update_handler(payload)
             return jsonify(response), 200
         elif payload['type'] == VapiWebhookEnum.CONVERSATION_UPDATE.value:
-            response = conversation_update_handler(payload)
+            response = await conversation_update_handler(payload)
             return jsonify(response), 200
         elif payload['type'] == VapiWebhookEnum.TRANSCRIPT.value:
-            response = transcript_handler(payload)
+            response = await transcript_handler(payload)
             return jsonify(response), 200
         elif payload['type'] == VapiWebhookEnum.HANG.value:
-            response = hang_event_handler(payload)
+            response = await hang_event_handler(payload)
             return jsonify(response), 200
         else:
             raise ValueError('Unhandled message type')
     except Exception as e:
         return jsonify({'error': str(e)}), 500
     
-# This is the server URL set in the assistant_config. Vapi sends to that endpoint + "/chat/completions"    
+# this is the server url set in the assistant_config. vapi sends to that endpoint + "/chat/completions"    
 @app.route('/chat/completions', methods=['POST'])
-def chat_completions():    
+async def chat_completions():    
+
     # Get the 'messages' array from the JSON object
-    messages = request.json.get("messages", [])
+    req_json = await request.get_json()
+    messages = req_json.get("messages", [])
 
     # Find the most recent message where role is 'user'
     human_message_content = None
@@ -91,35 +93,63 @@ def generate_response(human_message_content):
             })
             yield f"data: {json_data}\n\n"
     yield "data: [DONE]\n\n"
+          
 
-  
-def function_call_handler(payload):
+async def function_call_handler(payload):
+    """
+    Handle Business logic here.
+    """
     function_call = payload.get('functionCall')
+
     if not function_call:
         raise ValueError("Invalid Request.")
+
     name = function_call.get('name')
     parameters = function_call.get('parameters')
+  
     return None
 
-def status_update_handler(payload):
+async def status_update_handler(payload):
+    """
+    Handle Business logic here.
+    """
     return None
 
-def end_of_call_report_handler(payload):
+async def end_of_call_report_handler(payload):
+    """
+    Handle Business logic here.
+    """
     return None
 
-def speech_update_handler(payload):
+async def speech_update_handler(payload):
+    """
+    Handle Business logic here.
+    """
     return None
 
-def conversation_update_handler(payload):
+async def conversation_update_handler(payload):
+    """
+    Handle Business logic here.
+    """
     return None
 
-def transcript_handler(payload):
+async def transcript_handler(payload):
+    """
+    Handle Business logic here.
+    """
     return None
 
-def hang_event_handler(payload):
+async def hang_event_handler(payload):
+    """
+    Handle Business logic here.
+    """
     return None 
 
-def assistant_request_handler(payload):
+async def assistant_request_handler(payload):
+    """
+    Handle Business logic here.
+    """
+
     if payload and 'call' in payload:
         assistant_config = {
             "name": "Andrew",
@@ -128,18 +158,20 @@ def assistant_request_handler(payload):
                 "model": "not specified",
                 "url": "https://b878-24-96-15-35.ngrok-free.app/",
                 "temperature": 0.7,
-                "systemPrompt": "You're Andrew, an AI assistant who can help user with any questions they have."
+                "systemPrompt": "You're Andrew, an AI assistant who can help users with any questions they have."
             },
             "voice": {
                 "provider": "azure",
                 "voiceId": "andrew",
                 "speed": 1
             },
-            "firstMessage": "Hi, I'm Andrew, your personal AI assistant.",
+            "firstMessage": "Hi, I'm Andrew. I'm on a quart server right now. How can I help you today?",
             "recordingEnabled": True
         }
         return {'assistant': assistant_config}
+
     raise ValueError('Invalid call details provided.')
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
